@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>С днём рождения, Ботик!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pageFlip {
+      from { opacity: 0; transform: scale(0.95) rotate(-2deg); }
+      to { opacity: 1; transform: scale(1) rotate(-0.8deg); }
+    }
+
+    @keyframes balloonWave {
+      0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+      50% { transform: translateY(-6px) rotate(1.5deg); }
+    }
+
+    @keyframes ambientFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.03); }
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* ЗДЕСЬ НАСТРАИВАЕТСЯ ЗАДНИЙ ФОН:
+         Положи свою фоновую картинку в эту же папку и назови её bg.jpg
+         Если картинки пока нет, сработает яркий розовый фон */
+      background-color: #ff85a2;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)), url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+      color: #2c161d;
+      text-align: center;
+      padding: 25px 15px;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* Декоративная праздничная зона с буквами-шарами без белого квадрата */
+    .header-box {
+      position: relative;
+      padding: 22px 26px 30px;
+      margin-bottom: 26px;
+      max-width: 580px;
+      width: 100%;
+      box-sizing: border-box;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .header-box::before {
+      content: '';
+      position: absolute;
+      inset: 4px 10px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 18% 35%, rgba(255, 213, 79, 0.42), transparent 45%),
+        radial-gradient(circle at 82% 30%, rgba(79, 195, 247, 0.42), transparent 45%),
+        radial-gradient(circle at 50% 75%, rgba(255, 107, 157, 0.36), transparent 55%),
+        linear-gradient(135deg, rgba(255, 250, 240, 0.55), rgba(255, 224, 236, 0.45));
+      backdrop-filter: blur(6px);
+      border: 1.5px dashed rgba(255, 255, 255, 0.75);
+      box-shadow:
+        0 10px 28px rgba(136, 14, 79, 0.14),
+        inset 0 0 20px rgba(255, 255, 255, 0.6);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .confetti-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .confetti-dots span {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      opacity: 0.75;
+      animation: ambientFloat 3.6s ease-in-out infinite;
+    }
+
+    .confetti-dots span:nth-child(1) { top: 8px; left: 12%; background: #ffd54f; animation-delay: 0s; }
+    .confetti-dots span:nth-child(2) { top: 14px; right: 14%; background: #4fc3f7; animation-delay: 0.7s; }
+    .confetti-dots span:nth-child(3) { bottom: 10px; left: 18%; background: #ff4081; animation-delay: 1.2s; }
+    .confetti-dots span:nth-child(4) { bottom: 12px; right: 20%; background: #4db6ac; animation-delay: 1.8s; }
+
+    /* Надпись из объёмных фольгированных букв-шаров */
+    .balloon-text-wrap {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 6px 5px;
+      margin: 0;
+      user-select: none;
+    }
+
+    .word-group {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 4px;
+      margin: 0 6px;
+    }
+
+    .balloon-letter {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      animation: balloonWave 3.2s ease-in-out infinite;
+    }
+
+    .balloon-letter:nth-child(odd) {
+      animation-delay: 0.4s;
+    }
+
+    .balloon-letter:nth-child(even) {
+      animation-delay: 1.1s;
+    }
+
+    .letter-bubble {
+      font-family: 'Pacifico', cursive, sans-serif;
+      font-size: 1.75rem;
+      line-height: 1.05;
+      padding: 6px 10px 8px;
+      border-radius: 46% 46% 42% 42% / 42% 42% 48% 48%;
+      color: #ffffff;
+      text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.28),
+        0 -1px 1px rgba(255, 255, 255, 0.5);
+      box-shadow:
+        inset 3px 4px 8px rgba(255, 255, 255, 0.55),
+        inset -4px -5px 10px rgba(0, 0, 0, 0.22),
+        0 6px 12px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .letter-bubble::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 7px;
+      width: 9px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.65);
+      transform: rotate(-25deg);
+      pointer-events: none;
+    }
+
+    .letter-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1.5px;
+      height: 11px;
+      background: rgba(92, 26, 46, 0.45);
+    }
+
+    .c-rose   { background: linear-gradient(145deg, #ff6b9d, #d81b60); }
+    .c-gold   { background: linear-gradient(145deg, #ffd54f, #f57c00); }
+    .c-sky    { background: linear-gradient(145deg, #4fc3f7, #0288d1); }
+    .c-violet { background: linear-gradient(145deg, #ba68c8, #7b1fa2); }
+    .c-mint   { background: linear-gradient(145deg, #4db6ac, #00796b); }
+    .c-coral  { background: linear-gradient(145deg, #ff8a65, #e64a19); }
+
+    .book-container {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      animation: fadeIn 0.8s ease-out 0.2s both;
+    }
+
+    /* Винтажная рамка в стиле Polaroid */
+    .page {
+      display: none;
+      position: relative;
+      background: linear-gradient(180deg, #fcf8f0 0%, #f5ebd8 100%);
+      padding: 16px 16px 36px 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(180, 145, 100, 0.35);
+      box-shadow:
+        0 22px 45px rgba(44, 22, 29, 0.28),
+        0 4px 12px rgba(44, 22, 29, 0.14),
+        inset 0 0 24px rgba(212, 180, 131, 0.25);
+      transform: rotate(-0.8deg);
+      box-sizing: border-box;
+      animation: pageFlip 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Винтажный скотч сверху по центру */
+    .page::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1.5deg);
+      width: 84px;
+      height: 22px;
+      background: rgba(255, 241, 193, 0.72);
+      border-left: 1px dashed rgba(160, 125, 80, 0.35);
+      border-right: 1px dashed rgba(160, 125, 80, 0.35);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      pointer-events: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 1px solid rgba(120, 90, 60, 0.22);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.16);
+      margin-bottom: 18px;
+      background-color: #f7eef1;
+      display: block;
+    }
+
+    /* Новый винтажный шрифт и тёплый цвет подписей */
+    .caption {
+      font-family: 'Bad Script', cursive, sans-serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+      color: #5c1a2e;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+      margin: 0;
+      padding: 0 6px;
+      line-height: 1.35;
+      min-height: 32px;
+      letter-spacing: 0.4px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 22px;
+      gap: 10px;
+    }
+
+    button {
+      background: rgba(255, 250, 242, 0.94);
+      color: #7a1c3a;
+      border: 1px solid rgba(180, 145, 100, 0.4);
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 18px rgba(44, 22, 29, 0.15);
+    }
+
+    button:hover {
+      background: #7a1c3a;
+      color: #fff8eb;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .page-counter {
+      background: rgba(255, 250, 242, 0.94);
+      border: 1px solid rgba(180, 145, 100, 0.35);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      color: #7a1c3a;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(44, 22, 29, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- НАДПИСЬ «С днём рождения, Ботик!» В ВИДЕ БУКВ-ШАРОВ -->
+  <header class="header-box">
+    <div class="confetti-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <h1 class="balloon-text-wrap" aria-label="С днём рождения, Ботик!">
+      <span class="word-group">
+        <span class="balloon-letter"><span class="letter-bubble c-rose">С</span></span>
+      </span>
+
+      <span class="word-group">
+        <span class="balloon-letter"><span class="letter-bubble c-gold">д</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-sky">н</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-violet">ё</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-mint">м</span></span>
+      </span>
+
+      <span class="word-group">
+        <span class="balloon-letter"><span class="letter-bubble c-coral">р</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-rose">о</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-gold">ж</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-sky">д</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-violet">е</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-mint">н</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-coral">и</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-rose">я</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-gold">,</span></span>
+      </span>
+
+      <span class="word-group">
+        <span class="balloon-letter"><span class="letter-bubble c-sky">Б</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-violet">о</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-mint">т</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-coral">и</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-rose">к</span></span>
+        <span class="balloon-letter"><span class="letter-bubble c-gold">!</span></span>
+      </span>
+    </h1>
+  </header>
+
+  <div class="book-container" id="book">
+
+    <!-- СТРАНИЦА 1 -->
+    <div class="page active">
+      <img src="photo1.jpg" alt="Фото 1" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'375\' viewBox=\'0 0 100 125\'><rect width=\'100%\' height=\'100%\' fill=\'%23f5e6ea\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'8\' font-family=\'sans-serif\' fill=\'%23765860\'>photo1.jpg</text></svg>';">
+      <p class="caption">МОЯ ЛЮБИМАЯ ЗАЙКА ХИХИ🤭</p>
+    </div>
+
+    <!-- СТРАНИЦА 2 -->
+    <div class="page">
+      <img src="photo2.jpg" alt="Фото 2" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'375\' viewBox=\'0 0 100 125\'><rect width=\'100%\' height=\'100%\' fill=\'%23f5e6ea\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'8\' font-family=\'sans-serif\' fill=\'%23765860\'>photo2.jpg</text></svg>';">
+      <p class="caption">ТИ МОЙ САМИЙ ЯРКИ ЛУЧИК СВЕТА❤️</p>
+    </div>
+
+    <!-- СТРАНИЦА 3 -->
+    <div class="page">
+      <img src="photo3.jpg" alt="Фото 3" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'375\' viewBox=\'0 0 100 125\'><rect width=\'100%\' height=\'100%\' fill=\'%23f5e6ea\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'8\' font-family=\'sans-serif\' fill=\'%23765860\'>photo3.jpg</text></svg>';">
+      <p class="caption">СПАСИБО ЧТО ДЕЛАЕШЬ МЕНЯ СЧАСТЛИВЫМ😛</p>
+    </div>
+
+    <!-- СТРАНИЦА 4 -->
+    <div class="page">
+      <img src="photo4.jpg" alt="Фото 4" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'375\' viewBox=\'0 0 100 125\'><rect width=\'100%\' height=\'100%\' fill=\'%23f5e6ea\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'8\' font-family=\'sans-serif\' fill=\'%23765860\'>photo4.jpg</text></svg>';">
+      <p class="caption">Я ТАК ТЕБЯ ЛЮБЛЮ КОТЕНОЧЕК МОЙ🥰</p>
+    </div>
+
+    <!-- КНОПКИ УПРАВЛЕНИЯ -->
+    <div class="controls">
+      <button onclick="changePage(-1)">← Назад</button>
+      <span class="page-counter" id="counter">1 / 4</span>
+      <button onclick="changePage(1)">Вперёд →</button>
+    </div>
+
+  </div>
+
+  <script>
+    let currentPage = 0;
+    const pages = document.querySelectorAll('.page');
+    const counter = document.getElementById('counter');
+
+    function showPage(index) {
+      pages.forEach(p => p.classList.remove('active'));
+      currentPage = (index + pages.length) % pages.length;
+      pages[currentPage].classList.add('active');
+      counter.textContent = `${currentPage + 1} / ${pages.length}`;
+    }
+
+    function changePage(step) {
+      showPage(currentPage + step);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') changePage(1);
+      if (e.key === 'ArrowLeft') changePage(-1);
+    });
+
+    let touchStartX = 0;
+    const book = document.getElementById('book');
+    book.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    book.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 40) changePage(diff > 0 ? 1 : -1);
+    });
+  </script>
+
+</body>
+</html>
